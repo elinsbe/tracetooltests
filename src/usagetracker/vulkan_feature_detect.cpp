@@ -1546,6 +1546,7 @@ VkResult check_vkCreateSharedSwapchainsKHR(VkDevice device, uint32_t swapchainCo
 	for (uint32_t i = 0; i < swapchainCount; i++)
 	{
 		if (is_colorspace_ext(pCreateInfos[i].imageColorSpace)) instance->has_VK_EXT_swapchain_colorspace = true;
+		if (pCreateInfos[i].flags & VK_SWAPCHAIN_CREATE_PRESENT_WAIT_2_BIT_KHR) instance->has_VK_KHR_present_wait2 = true;
 	}
 	return VK_SUCCESS;
 }
@@ -1553,6 +1554,7 @@ VkResult check_vkCreateSharedSwapchainsKHR(VkDevice device, uint32_t swapchainCo
 VkResult check_vkCreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSwapchainKHR* pSwapchain)
 {
 	if (is_colorspace_ext(pCreateInfo->imageColorSpace)) instance->has_VK_EXT_swapchain_colorspace = true;
+	if (pCreateInfo->flags & VK_SWAPCHAIN_CREATE_PRESENT_WAIT_2_BIT_KHR) instance->has_VK_KHR_present_wait2 = true;
 	return VK_SUCCESS;
 }
 

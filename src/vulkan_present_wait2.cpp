@@ -30,6 +30,15 @@ int main(int argc, char **argv)
 	vulkan_req_t reqs{};
 	reqs.physical_device_supported = present_wait2_supported;
 	reqs.surface = true;
+	const char *winsys = getenv("TOOLSTEST_WINSYS");
+	if (winsys && strcmp(winsys, "headless") == 0)
+	{
+		reqs.instance_extensions.push_back("VK_EXT_headless_surface");
+	}
+	else
+	{
+		reqs.instance_extensions.push_back("VK_KHR_xcb_surface");
+	}
 	reqs.instance_extensions.push_back(VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME);
 	reqs.device_extensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
 	reqs.device_extensions.push_back(VK_KHR_PRESENT_ID_2_EXTENSION_NAME);
@@ -39,6 +48,7 @@ int main(int argc, char **argv)
 	VkPhysicalDevicePresentId2FeaturesKHR present_id2_features{VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PRESENT_ID_2_FEATURES_KHR,
 	                                                           &present_wait2_features, VK_TRUE};
 	reqs.extension_features = reinterpret_cast<VkBaseInStructure *>(&present_id2_features);
+	reqs.minApiVersion = VK_API_VERSION_1_1;
 
 	vulkan_setup_t vulkan = test_init(argc, argv, "vulkan_present_wait2", reqs);
 
